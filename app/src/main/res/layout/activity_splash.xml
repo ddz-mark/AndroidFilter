@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/w_match_h_match">
+
+    <TextView
+        style="@style/w_wrap_h_wrap"
+        android:layout_marginBottom="30dp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/base_color"
+        android:id="@+id/tv_splash"
+        android:text="@string/app_name"
+        android:textSize="50sp"/>
+
+    <TextView
+        style="@style/w_match_h_wrap"
+        android:layout_marginBottom="15dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="2017"/>
+
+</RelativeLayout>
