@@ -90,7 +90,7 @@ public class UserFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("新鲜事");
+        getActivity().setTitle(R.string.app_name);
         setHasOptionsMenu(true); // 配置Actionbar可先的属性
         View view = inflater.inflate(R.layout.fragment_user, null);
         ButterKnife.bind(this, view);
@@ -117,7 +117,7 @@ public class UserFragment extends BaseFragment {
             }
             mName.setText(userEntity.getName());
             mSex.setText(userEntity.isSex()?getString(R.string.text_boy):getString(R.string.text_girl));
-            mAge.setText(userEntity.getAge() + "");
+            mAge.setText(userEntity.getAge()+" ");
             mDesc.setText(userEntity.getDesc());
         }
     }

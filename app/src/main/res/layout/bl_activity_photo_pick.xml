@@ -11,5 +11,5 @@
         android:verticalSpacing="5dp"
         android:numColumns="3"
         android:scrollbars="none"
-        android:listSelector="@null"></GridView>
+        android:listSelector="@null"/>
 </LinearLayout>

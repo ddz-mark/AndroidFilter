@@ -8,8 +8,7 @@
         android:id="@+id/toolbar_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:theme="@style/BaseToolbarTheme">
+        android:background="@color/colorPrimary">
 
 
     </android.support.v7.widget.Toolbar>

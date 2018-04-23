@@ -9,31 +9,46 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <RadioGroup
-        android:id="@+id/main_radio"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:background="@color/bottom_tab_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:gravity="center_vertical">
 
-        <RadioButton
-            android:id="@+id/rb_news"
-            style="@style/main_nav_bottom"
+        <RadioGroup
+            android:id="@+id/main_radio"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
 
-            android:text="新鲜事"/>
-        <!--android:drawableTop="@drawable/selector_nav_news"-->
-        <RadioButton
-            android:id="@+id/rb_photo"
-            style="@style/main_nav_bottom"
-            android:text="拍照"/>
+            <RadioButton
+                android:id="@+id/rb_news"
+                style="@style/main_nav_bottom"
+                android:drawableTop="@drawable/selector_nav_news"
+                android:text="新鲜事"/>
 
-        <RadioButton
-            android:id="@+id/rb_user"
-            style="@style/main_nav_bottom"
+            <!--<RadioButton-->
+            <!--android:id="@+id/rb_photo"-->
+            <!---->
+            <!--android:drawableTop="@drawable/ic_nav_news_default"/>-->
 
-            android:text="我的"/>
-        <!--android:drawableTop="@drawable/selector_nav_user"-->
-    </RadioGroup>
+            <ImageButton
+                android:layout_gravity="center"
+                android:id="@+id/ib_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_weight="1"
+                android:src="@drawable/filter_button"/>
+
+            <RadioButton
+                android:id="@+id/rb_user"
+                style="@style/main_nav_bottom"
+                android:drawableTop="@drawable/selector_nav_user"
+                android:text="我的"/>
+
+        </RadioGroup>
+
+    </RelativeLayout>
 </LinearLayout>

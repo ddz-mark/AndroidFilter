@@ -16,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +36,12 @@ import com.bumptech.glide.Glide;
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.adapter.BLImageGridAdapter;
 import net.smartbetter.wonderful.adapter.FolderAdapter;
+import net.smartbetter.wonderful.base.BaseToolBarActivity;
 import net.smartbetter.wonderful.entity.BLBeautifyParam;
 import net.smartbetter.wonderful.entity.FolderInfo;
 import net.smartbetter.wonderful.entity.ImageInfo;
-import net.smartbetter.wonderful.utils.BLConfigManager;
 import net.smartbetter.wonderful.utils.FileUtils;
+import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +49,8 @@ import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static net.smartbetter.wonderful.utils.ConstantUtils.REQUEST_CODE_CAMERA;
 
 
 /**
@@ -76,8 +78,6 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
     private static final int LOADER_ALL = 0;
     private static final int LOADER_CATEGORY = 1;
 
-
-    public static final int REQUEST_CODE_CAMERA = 1;
 
     private LoaderManager.LoaderCallbacks<Cursor> mLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 
@@ -179,16 +179,15 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
         mToolbar.inflateMenu(R.menu.menu_photo_pick);
         MenuItem item = mToolbar.getMenu().findItem(R.id.photo_pick_menu);
         View actionView = item.getActionView();
-        actionView.setBackgroundColor(BLConfigManager.getToolBarColor());
-        mTvFolderName = getViewById(R.id.photo_picker_menu_item_title, actionView);
-        mTvComplete = getViewById(R.id.photo_picker_menu_item_complete, actionView);
-        mIvArrow = getViewById(R.id.photo_picker_menu_item_arrow, actionView);
+        mTvFolderName = (TextView) actionView.findViewById(R.id.photo_picker_menu_item_title);
+        mTvComplete = (TextView) actionView.findViewById(R.id.photo_picker_menu_item_complete);
+        mIvArrow = (ImageView) actionView.findViewById(R.id.photo_picker_menu_item_arrow);
 
     }
 
     @Override
     protected void initView() {
-        mGridView = getViewById(R.id.photo_pick_gv);
+        mGridView = (GridView) findViewById(R.id.photo_pick_gv);
     }
 
     @Override
@@ -269,7 +268,7 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mImageAdapter.isShowCamera() && position == 0) {
                     if (mImageAdapter.isSelectedMax()) {
-                        toast(getString(R.string.camerasdk_msg_amount_limit));
+                        ToastUtils.showShort(PhotoPickActivity.this,getString(R.string.camerasdk_msg_amount_limit));
                     } else {
                         showCameraAction();
                     }
@@ -380,7 +379,7 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
     //选择完成实现跳转
     private void selectComplete() {
         if (mImageAdapter.getSelectedImageList().size() == 0) {
-            toast("请选择图片");
+            ToastUtils.showShort(PhotoPickActivity.this,"请选择图片");
             return;
         }
         BLBeautifyParam param = new BLBeautifyParam(mImageAdapter.getSelectedImagePathList());
@@ -431,7 +430,7 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (requestCode == REQUEST_CODE_CAMERA) {
-            toast("您拒绝了照相的权限");
+            ToastUtils.showShort(this,"您拒绝了照相的权限");
         }
     }
 

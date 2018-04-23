@@ -16,4 +16,8 @@ public class ConstantUtils {
 
     //Bmob key
     public static final String BMOB_APP_ID = "ff7f6eb9236e57bd59f8caa348c8309b";
+
+    //权限检查
+    public static final int REQUEST_CODE_PERMISSION = 10;
+    public static final int REQUEST_CODE_CAMERA = 11;
 }

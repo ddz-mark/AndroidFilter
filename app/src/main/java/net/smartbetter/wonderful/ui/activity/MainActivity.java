@@ -7,14 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import net.smartbetter.wonderful.R;
-import net.smartbetter.wonderful.entity.BLPickerParam;
-import net.smartbetter.wonderful.entity.BLResultParam;
 import net.smartbetter.wonderful.ui.fragment.NewsFragment;
 import net.smartbetter.wonderful.ui.fragment.UserFragment;
+import net.smartbetter.wonderful.utils.ActivityUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.util.List;
@@ -24,22 +24,22 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static net.smartbetter.wonderful.utils.ConstantUtils.REQUEST_CODE_PERMISSION;
+
 /**
  * 主页
  * Created by gc on 2017/1/16.
  */
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
-    @BindView(R.id.main_radio) RadioGroup mMainRadio;
+    @BindView(R.id.main_radio)
+    RadioGroup mMainRadio;
+    @BindView(R.id.ib_photo)
+    ImageButton mIbPhoto;
 
     private Fragment currentFragment;
     private NewsFragment newsFragment;
     private UserFragment userFragment;
-
-    //返回给主页的内容
-    private BLResultParam mResultParam;
-    public static final int REQUEST_CODE_PERMISSION = 0;
-//    public static final int REQUEST_CODE_PHOTO_PICKER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         // 新鲜事
                         switchFragment(newsFragment);
                         break;
-                    case R.id.rb_photo:
-                        // 图片滤镜
-                        gotoPhotoPickActivity();
-                        break;
                     case R.id.rb_user:
                         // 我的
                         switchFragment(userFragment);
@@ -77,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     default:
                         break;
                 }
+            }
+        });
+        mIbPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoPhotoPickActivity();
             }
         });
         // 设置默认选中首页
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     /**
      * Switch fragment.
+     *
      * @param fragment
      */
     private void switchFragment(Fragment fragment) {
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private void gotoPhotoPickActivity() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            BLPickerParam.startActivity(MainActivity.this);
+            ActivityUtils.startActivity(MainActivity.this, PhotoPickActivity.class);
         } else {
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问读写权限", REQUEST_CODE_PERMISSION, perms);
         }
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (requestCode == REQUEST_CODE_PERMISSION) {
-            Toast.makeText(this, "您拒绝了读取图片的权限", Toast.LENGTH_SHORT).show();
+            ToastUtils.showShort(this, "您拒绝了读取图片的权限");
         }
     }
 
@@ -149,8 +152,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     // 记录用户首次点击返回键的时间
     private long firstTime = 0;
+
     /**
      * 监听keyUp 实现双击退出程序
+     *
      * @param keyCode
      * @param event
      * @return

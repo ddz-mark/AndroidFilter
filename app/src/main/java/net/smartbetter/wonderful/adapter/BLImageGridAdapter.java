@@ -1,6 +1,7 @@
 package net.smartbetter.wonderful.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import com.bumptech.glide.Glide;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.entity.ImageInfo;
-import net.smartbetter.wonderful.utils.BLConfigManager;
 import net.smartbetter.wonderful.utils.BLSelectedStateListDrawable;
 import net.smartbetter.wonderful.utils.ToastUtils;
 
@@ -270,7 +270,7 @@ public class BLImageGridAdapter extends BaseAdapter {
                 holder.bindData(getItem(position));
             }
 
-            holder.ivCheck.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     select(getItem(position));
@@ -300,7 +300,7 @@ public class BLImageGridAdapter extends BaseAdapter {
             this.itemView = itemView;
             ivPicture = (ImageView) itemView.findViewById(R.id.image);
             ivCheck = (ImageView) itemView.findViewById(R.id.checkmark);
-            ivCheck.setImageDrawable(new BLSelectedStateListDrawable(mContext.getResources().getDrawable(R.drawable.bl_check_normal), BLConfigManager.getPrimaryColor()));
+            ivCheck.setImageDrawable(new BLSelectedStateListDrawable(mContext.getResources().getDrawable(R.drawable.bl_check_normal),Color.parseColor("#FF4081")));
             mask = itemView.findViewById(R.id.mask);
             itemView.setTag(this);
         }

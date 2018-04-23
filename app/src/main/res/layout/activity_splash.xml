@@ -17,6 +17,6 @@
         android:layout_marginBottom="15dp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:text="2017"/>
+        android:text="2018"/>
 
 </RelativeLayout>

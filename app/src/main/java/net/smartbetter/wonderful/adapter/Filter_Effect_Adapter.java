@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.entity.Filter_Effect_Info;
-import net.smartbetter.wonderful.utils.BLConfigManager;
 
 import java.util.List;
 
@@ -72,7 +71,7 @@ public class Filter_Effect_Adapter extends BaseAdapter {
 
 			if (position == selectItem) {
 				//holder.item_back.setBackgroundColor(Color.YELLOW);
-				holder.item_back.setBackgroundColor(BLConfigManager.getPrimaryColor());
+				holder.item_back.setBackgroundColor(Color.parseColor("#FF4081"));
 				holder.title.setTextColor(Color.WHITE);
 			} 
 			else {

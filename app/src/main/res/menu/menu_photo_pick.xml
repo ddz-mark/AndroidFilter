@@ -5,5 +5,5 @@
         android:id="@+id/photo_pick_menu"
         android:title=""
         app:actionLayout="@layout/bl_photo_picker_menu_layout"
-        app:showAsAction="always"></item>
+        app:showAsAction="always"/>
 </menu>

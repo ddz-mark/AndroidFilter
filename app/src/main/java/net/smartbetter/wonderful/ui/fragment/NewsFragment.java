@@ -60,7 +60,7 @@ public class NewsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("新鲜事");
+        getActivity().setTitle(R.string.app_name);
         setHasOptionsMenu(true); // 配置Actionbar可先的属性
         View view = inflater.inflate(R.layout.fragment_news, null);
         ButterKnife.bind(this, view);
