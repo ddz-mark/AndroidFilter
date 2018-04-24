@@ -162,7 +162,6 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
                     getCurrentFragment().addFilter(mFilterData.get(position).getFilterType());
             }
         });
-
 //        fAdapter.setOnExtraPageChangeListener(new FragmentViewPagerAdapter.OnExtraPageChangeListener() {
 //            @Override
 //            public void onExtraPageSelected(int i) {

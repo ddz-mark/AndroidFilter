@@ -42,10 +42,12 @@ import net.smartbetter.wonderful.base.BaseActivity;
 import net.smartbetter.wonderful.entity.BLResultParam;
 import net.smartbetter.wonderful.entity.NewsEntity;
 import net.smartbetter.wonderful.entity.UserEntity;
+import net.smartbetter.wonderful.entity.event.RefreshNews;
 import net.smartbetter.wonderful.utils.ActivityUtils;
 import net.smartbetter.wonderful.utils.ConstantUtils;
 import net.smartbetter.wonderful.utils.ImageCompressHelper;
 import net.smartbetter.wonderful.utils.LogUtils;
+import net.smartbetter.wonderful.utils.RxBus;
 import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.io.File;
@@ -111,7 +113,6 @@ public class ShareActivity extends BaseActivity {
             ToastUtils.showShort(context, "您还没有登录");
             return null;
         }
-
     }
 
     /**
@@ -351,7 +352,9 @@ public class ShareActivity extends BaseActivity {
                 progressDialog.dismiss();
                 // 发布成功
                 ToastUtils.showShort(getApplicationContext(), getString(R.string.text_publish_successfully));
-                ShareActivity.this.setResult(ConstantUtils.RESULT_UPDATE_INFO, new Intent());
+//                ShareActivity.this.setResult(ConstantUtils.RESULT_UPDATE_INFO, new Intent());
+                ActivityUtils.startActivity(ShareActivity.this,MainActivity.class);
+                RxBus.getDefault().post(new RefreshNews());
                 finish();
             }
         });

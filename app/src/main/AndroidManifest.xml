@@ -107,5 +107,10 @@
 
         <activity android:name=".ui.activity.BeautifyImageActivity"/>
         <activity android:name=".ui.activity.PhotoPickActivity"/>
+        <activity
+            android:name=".ui.activity.PhotoPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActivityFullscreen"/>
+
     </application>
 </manifest>

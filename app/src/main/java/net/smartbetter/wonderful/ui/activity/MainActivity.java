@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import net.smartbetter.wonderful.R;
-import net.smartbetter.wonderful.ui.fragment.NewsFragment;
+import net.smartbetter.wonderful.ui.fragment.NewNewsFragment;
 import net.smartbetter.wonderful.ui.fragment.UserFragment;
 import net.smartbetter.wonderful.utils.ActivityUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     ImageButton mIbPhoto;
 
     private Fragment currentFragment;
-    private NewsFragment newsFragment;
+    private NewNewsFragment newsFragment;
     private UserFragment userFragment;
 
     @Override
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
      * Initialize fragment.
      */
     private void initFragment() {
-        newsFragment = new NewsFragment();
+        newsFragment = new NewNewsFragment();
         userFragment = new UserFragment();
         setDefaultFragment(newsFragment);
     }

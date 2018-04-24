@@ -63,7 +63,7 @@
         android:id="@+id/bt_publish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/selector_button"
         android:text="发布"
         android:textColor="@color/color_white"
         android:textSize="18sp"/>   <!--android:background="@drawable/selector_button"-->
