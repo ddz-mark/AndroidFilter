@@ -79,6 +79,8 @@ public class BLImageGridAdapter extends BaseAdapter {
             if (isSelectedMax()){
                 ToastUtils.showShort(mContext, mContext.getResources().getString(R.string.camerasdk_msg_amount_limit));
             }else{
+                //只允许选中一张
+                mSelectedImages.clear();
                 mSelectedImages.add(imageInfo);
             }
         }

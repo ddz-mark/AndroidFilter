@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">新鲜事</string>
+    <string name="app_name">图片滤镜</string>
 
     <string name="text_unknown">未知</string>
     <string name="text_setting">设置</string>

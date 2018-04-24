@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.entity.NewsEntity;
@@ -26,7 +27,7 @@ public class NewsListAdapter extends BaseAdapter {
     private ViewHolder holder;
     private LayoutInflater inflater;
 
-    public NewsListAdapter(Context context, List<NewsEntity> list){
+    public NewsListAdapter(Context context, List<NewsEntity> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
@@ -77,6 +78,8 @@ public class NewsListAdapter extends BaseAdapter {
             holder.img.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(newsEntity.getImg().getFileUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
                     .into(holder.img);
         } else {
             holder.img.setVisibility(View.GONE);

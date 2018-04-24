@@ -25,8 +25,9 @@
             <RadioButton
                 android:id="@+id/rb_news"
                 style="@style/main_nav_bottom"
-                android:drawableTop="@drawable/selector_nav_news"
                 android:text="新鲜事"/>
+            <!--android:drawableTop="@drawable/selector_nav_news"-->
+
 
             <!--<RadioButton-->
             <!--android:id="@+id/rb_photo"-->
@@ -34,19 +35,20 @@
             <!--android:drawableTop="@drawable/ic_nav_news_default"/>-->
 
             <ImageButton
-                android:layout_gravity="center"
                 android:id="@+id/ib_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:src="@drawable/filter_button"/>
 
             <RadioButton
                 android:id="@+id/rb_user"
                 style="@style/main_nav_bottom"
-                android:drawableTop="@drawable/selector_nav_user"
                 android:text="我的"/>
+            <!--android:drawableTop="@drawable/selector_nav_user"-->
+
 
         </RadioGroup>
 

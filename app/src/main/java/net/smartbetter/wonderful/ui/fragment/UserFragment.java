@@ -117,7 +117,7 @@ public class UserFragment extends BaseFragment {
             }
             mName.setText(userEntity.getName());
             mSex.setText(userEntity.isSex()?getString(R.string.text_boy):getString(R.string.text_girl));
-            mAge.setText(userEntity.getAge()+" ");
+            mAge.setText(String.valueOf(userEntity.getAge()));
             mDesc.setText(userEntity.getDesc());
         }
     }
@@ -159,10 +159,10 @@ public class UserFragment extends BaseFragment {
     @OnClick(R.id.btn_update_ok)
     public void onUpdateOk(View view) {
         // 1.拿到输入框的值
-        String name = mName.getText().toString();
-        String age = mAge.getText().toString();
-        String sex = mSex.getText().toString();
-        String desc = mDesc.getText().toString();
+        String name = mName.getText().toString().trim();
+        String age = mAge.getText().toString().trim();
+        String sex = mSex.getText().toString().trim();
+        String desc = mDesc.getText().toString().trim();
         // 2.判断是否为空
         if (!TextUtils.isEmpty(name) & !TextUtils.isEmpty(age) & !TextUtils.isEmpty(sex)) {
             // 3.更新属性
@@ -190,7 +190,7 @@ public class UserFragment extends BaseFragment {
                         ToastUtils.showShort(getActivity(), getString(R.string.text_editor_success));
                     } else {
                         ToastUtils.showShort(getActivity(), getString(R.string.text_editor_failure));
-                        LogUtils.i("JAVA", getString(R.string.text_editor_failure)+e.toString());
+//                        LogUtils.i("JAVA", getString(R.string.text_editor_failure)+e.toString());
                     }
                 }
             });

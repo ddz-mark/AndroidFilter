@@ -151,7 +151,7 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
                     //将照相返回的图片默认选中
                     if (mTmpFile != null) {
                         mImageAdapter.select(mImageAdapter.getImageByPath(mTmpFile.getPath()));
-                        setSelectedNum(mImageAdapter.getSelectedImageList().size());
+//                        setSelectedNum(mImageAdapter.getSelectedImageList().size());
                         mTmpFile = null;
                     }
                     if (mFolderAdapter != null) {
@@ -195,7 +195,7 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
         mImageAdapter = new BLImageGridAdapter(mInstance, true);
         mGridView.setAdapter(mImageAdapter);
         mFolderAdapter = new FolderAdapter(mInstance);
-        setSelectedNum(mImageAdapter.getSelectedImageList().size());
+//        setSelectedNum(mImageAdapter.getSelectedImageList().size());
         getSupportLoaderManager().restartLoader(LOADER_ALL, null, mLoaderCallback);
     }
 
@@ -276,12 +276,12 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
             }
         });
 
-        mImageAdapter.setSelectedListener(new BLImageGridAdapter.SelectedListener() {
-            @Override
-            public void onSelected(List<ImageInfo> selectedList) {
-                setSelectedNum(selectedList.size());
-            }
-        });
+//        mImageAdapter.setSelectedListener(new BLImageGridAdapter.SelectedListener() {
+//            @Override
+//            public void onSelected(List<ImageInfo> selectedList) {
+//                setSelectedNum(selectedList.size());
+//            }
+//        });
     }
 
     /**
@@ -289,9 +289,9 @@ public class PhotoPickActivity extends BaseToolBarActivity implements EasyPermis
      *
      * @param selectedNum
      */
-    private void setSelectedNum(int selectedNum) {
-        mTvComplete.setText("完成(" + selectedNum + "/" + mImageAdapter.MAX_SELECT_SIZE + ")");
-    }
+//    private void setSelectedNum(int selectedNum) {
+//        mTvComplete.setText("完成(" + selectedNum + "/" + mImageAdapter.MAX_SELECT_SIZE + ")");
+//    }
 
     /**
      * 选择相机

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/16.
- * 返回给主页面的数据
+ * 批量图片信息
  */
 
 public class BLResultParam implements Parcelable {

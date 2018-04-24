@@ -22,6 +22,7 @@ import net.smartbetter.wonderful.entity.BLBeautifyParam;
 import net.smartbetter.wonderful.entity.BLResultParam;
 import net.smartbetter.wonderful.entity.Filter_Effect_Info;
 import net.smartbetter.wonderful.ui.fragment.BLBeautifyFragment;
+import net.smartbetter.wonderful.utils.ActivityUtils;
 import net.smartbetter.wonderful.utils.FilterUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
 import net.smartbetter.wonderful.view.CustomViewPager;
@@ -97,20 +98,19 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
                         .subscribe(new Subscriber<BLResultParam>() {
                             @Override
                             public void onCompleted() {
-                                ToastUtils.showShort(BeautifyImageActivity.this,"图片已保存");
+                                ToastUtils.showShort(BeautifyImageActivity.this, "图片已保存");
+//                                ActivityUtils.startActivity(BeautifyImageActivity.this, ShareActivity.class);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                ToastUtils.showShort(BeautifyImageActivity.this,"图片保存失败");
+                                ToastUtils.showShort(BeautifyImageActivity.this, "图片保存失败");
                             }
 
                             @Override
                             public void onNext(BLResultParam param) {
-                                Intent intent = new Intent();
-                                intent.putExtra(BLResultParam.KEY, param);
-                                setResult(RESULT_OK, intent);
-                                onBackPressed();
+                                Intent intent = ShareActivity.getShareActivityIntent(BeautifyImageActivity.this, param);
+                                ActivityUtils.startActivity(BeautifyImageActivity.this, intent);
                             }
                         });
             }
@@ -139,7 +139,7 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
         mViewPager.setOffscreenPageLimit(imageList.size());
 
         mFilterData = FilterUtils.getEffectList();
-        setToolbarTitle(curPosition);
+        mToolbar.setTitle("滤镜");
         //默认滤镜被选中
         onFilterClick();
     }
@@ -163,25 +163,24 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
             }
         });
 
-        fAdapter.setOnExtraPageChangeListener(new FragmentViewPagerAdapter.OnExtraPageChangeListener() {
-            @Override
-            public void onExtraPageSelected(int i) {
-                curPosition = i;
-                setToolbarTitle(curPosition);
-            }
-        });
+//        fAdapter.setOnExtraPageChangeListener(new FragmentViewPagerAdapter.OnExtraPageChangeListener() {
+//            @Override
+//            public void onExtraPageSelected(int i) {
+//                curPosition = i;
+//                setToolbarTitle(curPosition);
+//            }
+//        });
 
     }
 
     /**
      * 设置标题
      *
-     * @param position
+     * @param
      */
-    private void setToolbarTitle(int position) {
-        mToolbar.setTitle("图片美化(" + (position + 1) + "/" + imageList.size() + ")");
-    }
-
+//    private void setToolbarTitle(int position) {
+//        mToolbar.setTitle("图片美化(" + (position + 1) + "/" + imageList.size() + ")");
+//    }
     private BLBeautifyFragment getCurrentFragment() {
         Fragment f = fragments.get(curPosition);
         if (f instanceof BLBeautifyFragment) {

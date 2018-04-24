@@ -3,6 +3,7 @@ package net.smartbetter.wonderful.ui.activity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,8 +39,10 @@ import com.bumptech.glide.Glide;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.base.BaseActivity;
+import net.smartbetter.wonderful.entity.BLResultParam;
 import net.smartbetter.wonderful.entity.NewsEntity;
 import net.smartbetter.wonderful.entity.UserEntity;
+import net.smartbetter.wonderful.utils.ActivityUtils;
 import net.smartbetter.wonderful.utils.ConstantUtils;
 import net.smartbetter.wonderful.utils.ImageCompressHelper;
 import net.smartbetter.wonderful.utils.LogUtils;
@@ -64,13 +69,19 @@ import cn.bmob.v3.listener.UploadBatchListener;
  */
 public class ShareActivity extends BaseActivity {
 
-    @BindView(R.id.et_content) EditText mContent;
-    @BindView(R.id.tv_tip) TextView mTip;
-    @BindView(R.id.layout_img) LinearLayout mLayoutImg;
+    @BindView(R.id.et_content)
+    EditText mContent;
+    @BindView(R.id.tv_tip)
+    TextView mTip;
+    @BindView(R.id.layout_img)
+    LinearLayout mLayoutImg;
+    @BindView(R.id.bt_publish)
+    Button mBtPublish;
 
-    private android.support.v7.app.AlertDialog photoDialog;
+    private AlertDialog photoDialog;
     private ProgressDialog progressDialog;
     List<String> listImg = new ArrayList<>();
+    BLResultParam mBLResultParam;
     public static final int CAMERA_REQUEST_CODE = 100;
     public static final int IMAGE_REQUEST_CODE = 101;
     private static final int REQUEST_BLUETOOTH_PERMISSION = 10;
@@ -83,7 +94,24 @@ public class ShareActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
+        mBLResultParam = getIntent().getParcelableExtra("param");
+        if (mBLResultParam != null) {
+            listImg = mBLResultParam.getImageList();
+            updateImg();
+        }
         initView();
+    }
+
+    public static Intent getShareActivityIntent(Context context, BLResultParam param) {
+        if (UserEntity.getCurrentUser() != null) {
+            Intent intent = new Intent(context, ShareActivity.class);
+            intent.putExtra("param", param);
+            return intent;
+        } else {
+            ToastUtils.showShort(context, "您还没有登录");
+            return null;
+        }
+
     }
 
     /**
@@ -95,11 +123,19 @@ public class ShareActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTip.setText(s.length() + "/64");
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+        mBtPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toPublish();
             }
         });
     }
@@ -111,7 +147,7 @@ public class ShareActivity extends BaseActivity {
     public void onForget(View view) {
         if (listImg.size() == 1) {
             // 兼容的 Material Design AlertDialog
-            new android.support.v7.app.AlertDialog.Builder(this)
+            new AlertDialog.Builder(this)
                     .setMessage("图片最多为一张")
                     // .setCancelable(false) // 设置点击Dialog以外的界面不消失，按返回键也不起作用
                     .setPositiveButton(getString(R.string.text_ok), null)
@@ -125,7 +161,7 @@ public class ShareActivity extends BaseActivity {
      * 选择相机/相册的提示对话框
      */
     private void showDialog() {
-        photoDialog = new android.support.v7.app.AlertDialog.Builder(this).create();
+        photoDialog = new AlertDialog.Builder(this).create();
         photoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         photoDialog.show();
         Window window = photoDialog.getWindow();
@@ -210,14 +246,14 @@ public class ShareActivity extends BaseActivity {
                     cursor.moveToFirst();
                     // 最后根据索引值获取图片路径
                     String path = cursor.getString(column_index);
-                    listImg.add(ImageCompressHelper.getInstance().compressIMG(this,path));
+                    listImg.add(ImageCompressHelper.getInstance().compressIMG(this, path));
                     // listImg.add(path);
                     updateImg();
                 }
                 break;
             case CAMERA_REQUEST_CODE: // 相机数据
-                if(ImageCompressHelper.getInstance().compressIMG(this,tempFileCameraPath)!=null) {
-                    listImg.add(ImageCompressHelper.getInstance().compressIMG(this,tempFileCameraPath));
+                if (ImageCompressHelper.getInstance().compressIMG(this, tempFileCameraPath) != null) {
+                    listImg.add(ImageCompressHelper.getInstance().compressIMG(this, tempFileCameraPath));
                     // listImg.add(tempFileCameraPath);
                     updateImg();
                 }
@@ -270,30 +306,31 @@ public class ShareActivity extends BaseActivity {
     }
 
     /**
-	 * 发表带图片的新鲜事
-	 */
+     * 发表带图片的新鲜事
+     */
     private void publish(final String commitContent) {
 
         // 批量上传图片到Bomb
-        BmobFile.uploadBatch((String[])listImg.toArray(new String[listImg.size()]), new UploadBatchListener() {
+        BmobFile.uploadBatch((String[]) listImg.toArray(new String[listImg.size()]), new UploadBatchListener() {
             @Override
             public void onSuccess(List<BmobFile> files, List<String> urls) {
                 // 1.files-上传完成后的BmobFile集合，是为了方便大家对其上传后的数据进行操作，例如你可以将该文件保存到表中
                 // 2.urls-上传文件的完整url地址
-                if(urls.size()==listImg.size()){ // 如果数量相等，则代表文件全部上传完成
+                if (urls.size() == listImg.size()) { // 如果数量相等，则代表文件全部上传完成
                     // do something
                     // LogUtils.i("JAVA", "URL:"+urls.toString());
                     publishWithoutFigure(commitContent, files);
                 }
             }
+
             @Override
             public void onError(int statuscode, String errormsg) {
                 progressDialog.dismiss();
-                LogUtils.i("JAVA", "错误码"+statuscode +",错误描述："+errormsg);
+                LogUtils.i("JAVA", "错误码" + statuscode + ",错误描述：" + errormsg);
             }
 
             @Override
-            public void onProgress(int curIndex, int curPercent, int total,int totalPercent) {
+            public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
                 // 1.curIndex--表示当前第几个文件正在上传
                 // 2.curPercent--表示当前上传文件的进度值（百分比）
                 // 3.total--表示总的上传文件数
@@ -329,6 +366,7 @@ public class ShareActivity extends BaseActivity {
         progressDialog.setCancelable(false); // 设置点击Dialog以外的界面不消失，按返回键也不起作用
         progressDialog.show();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -338,9 +376,9 @@ public class ShareActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_publish:
-                toPublish();
+                ActivityUtils.startActivity(ShareActivity.this, MainActivity.class);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -355,7 +393,7 @@ public class ShareActivity extends BaseActivity {
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
                 // 判断是否需要 向用户解释，为什么要申请该权限
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                    ToastUtils.showShort(this,"Need write external storage permission.");
+                    ToastUtils.showShort(this, "Need write external storage permission.");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_BLUETOOTH_PERMISSION);
                 return;
             } else {
