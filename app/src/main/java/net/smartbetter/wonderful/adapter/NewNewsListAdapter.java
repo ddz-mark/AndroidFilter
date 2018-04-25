@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -74,14 +75,6 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
         }
         holder.content.setText(newsEntity.getContent());
         holder.createdTime.setText(newsEntity.getCreatedAt());
-
-        holder.img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = PhotoPreviewActivity.getPhotoPreviewActivityIntent(context, newsEntity.getImg().getFileUrl());
-                ActivityUtils.startActivity(context, intent);
-            }
-        });
     }
 
     @Override
@@ -96,6 +89,9 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
         ImageView img; // 图片
         TextView content; // 内容
         TextView createdTime; // 创建时间
+        RadioButton like;
+        RadioButton comment;
+        RadioButton share;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -105,7 +101,35 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
             img = (ImageView) itemView.findViewById(R.id.iv_img);
             content = (TextView) itemView.findViewById(R.id.tv_content);
             createdTime = (TextView) itemView.findViewById(R.id.tv_created_time);
+            like = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_like);
+            comment = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_comment);
+            share = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_share);
+
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PhotoPreviewActivity.getPhotoPreviewActivityIntent(context, list.get(getLayoutPosition()).getImg().getFileUrl());
+                    ActivityUtils.startActivity(context, intent);
+                }
+            });
+            comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getLayoutPosition();
+                    mOnCommentClickListener.onCommentClick(position);
+                }
+            });
         }
+    }
+
+    private OnCommentClickListener mOnCommentClickListener;//声明接口
+
+    public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
+        mOnCommentClickListener = onCommentClickListener;
+    }
+
+    public interface OnCommentClickListener {
+        void onCommentClick(int position);
     }
 
 }

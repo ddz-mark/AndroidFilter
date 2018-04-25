@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.adapter.NewNewsListAdapter;
@@ -72,12 +73,22 @@ public class NewNewsFragment extends BaseFragment {
             mLayout = (LinearLayout) inflater.inflate(R.layout.fragment_new_news, container, false);
             ButterKnife.bind(this, mLayout);
             initView();
+            setListener();
         }
         getData(0);
         return mLayout;
     }
 
     private void initView() {
+        mTalkingSwiprefresh.setRefreshing(true);
+        mTalkingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTalkingRecyclerView.setPAGE_SIZE(LIMIT);
+
+        mAdapter = new NewNewsListAdapter(getActivity(), newsEntitys);
+        mTalkingRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setListener() {
         mSubscription = RxBus.getDefault().toObserverable(RefreshNews.class).subscribe(new Action1<RefreshNews>() {
             @Override
             public void call(RefreshNews news) {
@@ -85,10 +96,7 @@ public class NewNewsFragment extends BaseFragment {
                 getData(0);
             }
         });
-
         //下拉加载
-//        mTalkingSwiprefresh.setProgressViewOffset(false, 0, DensityUtil.dip2px(getContext(), 24));
-        mTalkingSwiprefresh.setRefreshing(true);
         mTalkingSwiprefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -101,8 +109,6 @@ public class NewNewsFragment extends BaseFragment {
                 }, 1000);
             }
         });
-        mTalkingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mTalkingRecyclerView.setPAGE_SIZE(LIMIT);
         //上拉刷新
         mTalkingRecyclerView.setLoadMoreListener(new LoadMoreRecyclerView.LoadMoreListener() {
             @Override
@@ -110,8 +116,12 @@ public class NewNewsFragment extends BaseFragment {
                 getData(currentPage + 1);
             }
         });
-        mAdapter = new NewNewsListAdapter(getActivity(), newsEntitys);
-        mTalkingRecyclerView.setAdapter(mAdapter);
+       mAdapter.setOnCommentClickListener(new NewNewsListAdapter.OnCommentClickListener() {
+           @Override
+           public void onCommentClick(int position) {
+
+           }
+       });
     }
 
     public void getData(final int page) {
