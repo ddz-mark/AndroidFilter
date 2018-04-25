@@ -2,6 +2,7 @@ package net.smartbetter.wonderful.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,14 @@ import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.entity.NewsEntity;
 import net.smartbetter.wonderful.ui.activity.PhotoPreviewActivity;
 import net.smartbetter.wonderful.utils.ActivityUtils;
+import net.smartbetter.wonderful.utils.LogUtils;
+import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static cn.bmob.v3.Bmob.getApplicationContext;
 
 /**
  * Created by Markable on 2018/4/24.
@@ -89,9 +94,10 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
         ImageView img; // 图片
         TextView content; // 内容
         TextView createdTime; // 创建时间
-        RadioButton like;
+        ImageView like;
         RadioButton comment;
         RadioButton share;
+        private boolean mBoolean = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -101,7 +107,7 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
             img = (ImageView) itemView.findViewById(R.id.iv_img);
             content = (TextView) itemView.findViewById(R.id.tv_content);
             createdTime = (TextView) itemView.findViewById(R.id.tv_created_time);
-            like = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_like);
+            like = (ImageView) itemView.findViewById(R.id.fragment_user_radio_like);
             comment = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_comment);
             share = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_share);
 
@@ -117,6 +123,24 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
                 public void onClick(View v) {
                     int position = getLayoutPosition();
                     mOnCommentClickListener.onCommentClick(position);
+                }
+            });
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mBoolean) {
+                        like.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_selected));
+                        mBoolean = false;
+                    } else {
+                        mBoolean = true;
+                        like.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_unselected));
+                    }
+                }
+            });
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtils.showShort(context,"谢谢分享！");
                 }
             });
         }

@@ -107,14 +107,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <RadioButton
+        <ImageView
             android:layout_margin="15dp"
             android:id="@+id/fragment_user_radio_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
-            android:drawableLeft="@drawable/comment"
-            android:text="13"/>
+            android:src="@drawable/like_unselected"
+         />
 
         <RadioButton
             android:layout_margin="15dp"
@@ -122,8 +122,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
-            android:drawableLeft="@drawable/comment"
-            android:text="13"/>
+            android:drawableLeft="@drawable/comment1"
+            android:text="  8"/>
 
         <RadioButton
             android:layout_margin="15dp"
@@ -131,9 +131,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
-            android:drawableLeft="@drawable/comment"
-            android:text="13"/>
+            android:drawableLeft="@drawable/share"
+            />
     </RadioGroup>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/item_comment_ll"
+        android:background="#a39f9f"/>
 
 
 </LinearLayout>

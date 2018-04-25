@@ -10,8 +10,17 @@ import cn.bmob.v3.BmobObject;
 
 public class CommentEntity extends BmobObject {
 
+    private String id;//对某一分享的评论
     private UserEntity mUserEntity;
     private String commentContent;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public UserEntity getUserEntity() {
         return mUserEntity;

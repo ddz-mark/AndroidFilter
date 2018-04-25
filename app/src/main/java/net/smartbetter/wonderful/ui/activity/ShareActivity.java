@@ -300,7 +300,7 @@ public class ShareActivity extends BaseActivity {
         }
         showPublishDialog();
         if (mLayoutImg == null) {
-            publishWithoutFigure(commitContent, null);
+            publishWithoutPigure(commitContent, null);
         } else {
             publish(commitContent);
         }
@@ -320,7 +320,7 @@ public class ShareActivity extends BaseActivity {
                 if (urls.size() == listImg.size()) { // 如果数量相等，则代表文件全部上传完成
                     // do something
                     // LogUtils.i("JAVA", "URL:"+urls.toString());
-                    publishWithoutFigure(commitContent, files);
+                    publishWithoutPigure(commitContent, files);
                 }
             }
 
@@ -340,7 +340,7 @@ public class ShareActivity extends BaseActivity {
         });
     }
 
-    private void publishWithoutFigure(final String commitContent, final List<BmobFile> files) {
+    private void publishWithoutPigure(final String commitContent, final List<BmobFile> files) {
         UserEntity userEntity = BmobUser.getCurrentUser(UserEntity.class);
         NewsEntity newsEntity = new NewsEntity();
         newsEntity.setAuthor(userEntity);
