@@ -25,8 +25,8 @@
             <RadioButton
                 android:id="@+id/rb_news"
                 style="@style/main_nav_bottom"
+                android:drawableTop="@drawable/selector_nav_news"
                 android:text="新鲜事"/>
-            <!--android:drawableTop="@drawable/selector_nav_news"-->
 
 
             <!--<RadioButton-->
@@ -46,8 +46,8 @@
             <RadioButton
                 android:id="@+id/rb_user"
                 style="@style/main_nav_bottom"
+                android:drawableTop="@drawable/selector_nav_user"
                 android:text="我的"/>
-            <!--android:drawableTop="@drawable/selector_nav_user"-->
 
 
         </RadioGroup>

@@ -2,6 +2,7 @@ package net.smartbetter.wonderful.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,14 +16,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.smartbetter.wonderful.R;
+import net.smartbetter.wonderful.entity.CommentEntity;
+import net.smartbetter.wonderful.entity.ItemNewsComment;
+import net.smartbetter.wonderful.entity.LikeEntity;
 import net.smartbetter.wonderful.entity.NewsEntity;
+import net.smartbetter.wonderful.entity.UserEntity;
 import net.smartbetter.wonderful.ui.activity.PhotoPreviewActivity;
 import net.smartbetter.wonderful.utils.ActivityUtils;
-import net.smartbetter.wonderful.utils.LogUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
@@ -36,9 +41,9 @@ import static cn.bmob.v3.Bmob.getApplicationContext;
 public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.ViewHolder> {
 
     private Context context;
-    private List<NewsEntity> list;
+    private List<ItemNewsComment> list;
 
-    public NewNewsListAdapter(Context context, List<NewsEntity> list) {
+    public NewNewsListAdapter(Context context, List<ItemNewsComment> list) {
         this.context = context;
         this.list = list;
     }
@@ -50,8 +55,10 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(NewNewsListAdapter.ViewHolder holder, int position) {
-        final NewsEntity newsEntity = list.get(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        final NewsEntity newsEntity = list.get(position).getNewsEntity();
+        final List<CommentEntity> commentEntityList = list.get(position).getCommentEntity();
+        final List<LikeEntity> likeEntityList = list.get(position).getLikeEntity();
 
         //头像
         Glide.with(context)
@@ -80,6 +87,31 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
         }
         holder.content.setText(newsEntity.getContent());
         holder.createdTime.setText(newsEntity.getCreatedAt());
+
+        boolean isLike = false;
+        // 如果存在，就删除这条记录
+        for (int i = 0; i < likeEntityList.size(); i++) {
+            if (likeEntityList.get(i).getUserEntity().getName().equals(BmobUser.getCurrentUser(UserEntity.class).getName())) {
+                isLike = true;
+                break;
+            }
+        }
+        if (isLike) {
+            holder.like.setButtonDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_selected));
+        } else {
+            holder.like.setButtonDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_unselected_3));
+        }
+        if (likeEntityList.size() != 0) {
+            holder.like.setText(" " + likeEntityList.size());
+        } else {
+            holder.like.setText("");
+        }
+
+        if (commentEntityList.size() != 0) {
+            holder.comment.setText(" " + commentEntityList.size());
+        } else {
+            holder.comment.setText("");
+        }
     }
 
     @Override
@@ -94,10 +126,9 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
         ImageView img; // 图片
         TextView content; // 内容
         TextView createdTime; // 创建时间
-        ImageView like;
+        RadioButton like;
         RadioButton comment;
         RadioButton share;
-        private boolean mBoolean = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,40 +138,33 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
             img = (ImageView) itemView.findViewById(R.id.iv_img);
             content = (TextView) itemView.findViewById(R.id.tv_content);
             createdTime = (TextView) itemView.findViewById(R.id.tv_created_time);
-            like = (ImageView) itemView.findViewById(R.id.fragment_user_radio_like);
+            like = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_like);
             comment = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_comment);
             share = (RadioButton) itemView.findViewById(R.id.fragment_user_radio_share);
 
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PhotoPreviewActivity.getPhotoPreviewActivityIntent(context, list.get(getLayoutPosition()).getImg().getFileUrl());
+                    Intent intent = PhotoPreviewActivity.getPhotoPreviewActivityIntent(context, list.get(getLayoutPosition()).getNewsEntity().getImg().getFileUrl());
                     ActivityUtils.startActivity(context, intent);
                 }
             });
             comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getLayoutPosition();
-                    mOnCommentClickListener.onCommentClick(position);
+                    mOnCommentClickListener.onCommentClick(getLayoutPosition());
                 }
             });
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mBoolean) {
-                        like.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_selected));
-                        mBoolean = false;
-                    } else {
-                        mBoolean = true;
-                        like.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.like_unselected));
-                    }
+                    mOnCommentClickListener.onLikeClick(getLayoutPosition());
                 }
             });
             share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToastUtils.showShort(context,"谢谢分享！");
+                    ToastUtils.showShort(context, "谢谢分享！");
                 }
             });
         }
@@ -154,6 +178,8 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
 
     public interface OnCommentClickListener {
         void onCommentClick(int position);
+
+        void onLikeClick(int position);
     }
 
 }

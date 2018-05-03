@@ -107,13 +107,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <RadioButton
             android:layout_margin="15dp"
             android:id="@+id/fragment_user_radio_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
-            android:src="@drawable/like_unselected"
+
          />
 
         <RadioButton
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:button="@null"
             android:drawableLeft="@drawable/comment1"
-            android:text="  8"/>
+           />
 
         <RadioButton
             android:layout_margin="15dp"

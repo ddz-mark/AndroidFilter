@@ -29,15 +29,29 @@ public class ToastUtils {
     /**
      * 短时间显示Toast
      */
-    public static void showShort(Context context, CharSequence message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
+//    public static void showShort(Context context, CharSequence message) {
+//        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//    }
 
     /**
      * 长时间显示Toast
      */
     public static void showLong(Context context, CharSequence message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    private static Toast toast;
+
+    public static void showShort(Context context,
+                                 String content) {
+        if (toast == null) {
+            toast = Toast.makeText(context,
+                    content,
+                    Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(content);
+        }
+        toast.show();
     }
 
 }
