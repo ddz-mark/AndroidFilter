@@ -180,6 +180,8 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
 //    private void setToolbarTitle(int position) {
 //        mToolbar.setTitle("图片美化(" + (position + 1) + "/" + imageList.size() + ")");
 //    }
+
+
     private BLBeautifyFragment getCurrentFragment() {
         Fragment f = fragments.get(curPosition);
         if (f instanceof BLBeautifyFragment) {
