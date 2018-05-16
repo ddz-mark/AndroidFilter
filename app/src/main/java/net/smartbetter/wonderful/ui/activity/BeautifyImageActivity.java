@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,8 @@ import net.smartbetter.wonderful.utils.FilterUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
 import net.smartbetter.wonderful.view.CustomViewPager;
 
+import org.opencv.android.OpenCVLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ import rx.schedulers.Schedulers;
 
 public class BeautifyImageActivity extends BaseToolBarActivity {
     private static int TXT_NORMAL_COLOR = Color.BLACK;
+    private static final String TAG = "BeautifyImageActivity";
 
     private CustomViewPager mViewPager;
     private RelativeLayout mRlContainer;
@@ -58,6 +62,13 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
 
     private BLBeautifyParam mParam;
 
+    static {
+        if (OpenCVLoader.initDebug()) {
+            Log.i(TAG, "OpenCV initialize success");
+        } else {
+            Log.i(TAG, "OpenCV initialize failed");
+        }
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -98,7 +109,7 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
                         .subscribe(new Subscriber<BLResultParam>() {
                             @Override
                             public void onCompleted() {
-                                ToastUtils.showShort(BeautifyImageActivity.this, "图片已保存");
+//                                ToastUtils.showShort(BeautifyImageActivity.this, "图片已保存");
 //                                ActivityUtils.startActivity(BeautifyImageActivity.this, ShareActivity.class);
                             }
 
@@ -141,7 +152,11 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
         mFilterData = FilterUtils.getEffectList();
         mToolbar.setTitle("滤镜");
         //默认滤镜被选中
-        onFilterClick();
+        mHlvFilter.setVisibility(View.VISIBLE);
+        if (mFilterAdapter == null) {
+            mFilterAdapter = new Filter_Effect_Adapter(mInstance, mFilterData);
+            mHlvFilter.setAdapter(mFilterAdapter);
+        }
     }
 
     @Override
@@ -190,15 +205,5 @@ public class BeautifyImageActivity extends BaseToolBarActivity {
             return null;
         }
     }
-
-
-    private void onFilterClick() {
-        mHlvFilter.setVisibility(View.VISIBLE);
-        if (mFilterAdapter == null) {
-            mFilterAdapter = new Filter_Effect_Adapter(mInstance, mFilterData);
-            mHlvFilter.setAdapter(mFilterAdapter);
-        }
-    }
-
 
 }

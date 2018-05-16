@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
+import com.tencent.wstt.gt.client.GT;
+
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.ui.fragment.NewNewsFragment;
 import net.smartbetter.wonderful.ui.fragment.UserFragment;
@@ -169,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 firstTime = secondTime;
                 return true;
             } else {
+//                GT测试工具退出应用
+                GT.disconnect(getApplicationContext());
+                finish();
                 System.exit(0);
             }
         }

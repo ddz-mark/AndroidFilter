@@ -23,6 +23,7 @@ import net.smartbetter.wonderful.entity.NewsEntity;
 import net.smartbetter.wonderful.entity.UserEntity;
 import net.smartbetter.wonderful.ui.activity.PhotoPreviewActivity;
 import net.smartbetter.wonderful.utils.ActivityUtils;
+import net.smartbetter.wonderful.utils.LogUtils;
 import net.smartbetter.wonderful.utils.ToastUtils;
 
 import java.util.List;
@@ -90,10 +91,12 @@ public class NewNewsListAdapter extends RecyclerView.Adapter<NewNewsListAdapter.
 
         boolean isLike = false;
         // 如果存在，就删除这条记录
-        for (int i = 0; i < likeEntityList.size(); i++) {
-            if (likeEntityList.get(i).getUserEntity().getName().equals(BmobUser.getCurrentUser(UserEntity.class).getName())) {
-                isLike = true;
-                break;
+        if (BmobUser.getCurrentUser(UserEntity.class)!=null) {
+            for (int i = 0; i < likeEntityList.size(); i++) {
+                if (likeEntityList.get(i).getUserEntity().getName().equals(BmobUser.getCurrentUser(UserEntity.class).getName())) {
+                    isLike = true;
+                    break;
+                }
             }
         }
         if (isLike) {

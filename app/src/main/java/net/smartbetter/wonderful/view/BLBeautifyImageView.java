@@ -58,8 +58,8 @@ public class BLBeautifyImageView extends FrameLayout {
     }
 
     /**********************************GPUImageView相关*********************************/
-    public void addFilter(ImageFilterTools.FilterType filterType) {
-        FilterUtils.addFilter(mContext, filterType, mGpuImageView);
+    public void addFilter(ImageFilterTools.FilterType filterType,String path) {
+        FilterUtils.addFilter(mContext, filterType, mGpuImageView,path);
     }
 
     /**
@@ -104,6 +104,10 @@ public class BLBeautifyImageView extends FrameLayout {
         return mGpuImageView.getCurrentBitMap();
     }
 
+    public Bitmap getInitBitmap(String path) {
+        return BLBitmapUtils.getBitmap(path);
+    }
+
     public GPUImageView getGPUImageView() {
         return mGpuImageView;
     }
@@ -137,7 +141,6 @@ public class BLBeautifyImageView extends FrameLayout {
             return "";
         }
     }
-
 
 
 }

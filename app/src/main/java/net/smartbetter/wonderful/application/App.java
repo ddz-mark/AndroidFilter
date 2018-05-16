@@ -2,6 +2,8 @@ package net.smartbetter.wonderful.application;
 
 import android.app.Application;
 
+import com.tencent.wstt.gt.client.GT;
+
 import net.smartbetter.wonderful.utils.ConfigUtils;
 import net.smartbetter.wonderful.utils.ConstantUtils;
 
@@ -35,6 +37,9 @@ public class App extends Application {
                     .build();
             Bmob.initialize(config);
         }
+
+        //GT初始化
+        GT.connect(getApplicationContext());
     }
 
 }

@@ -12,6 +12,7 @@ import com.muzhi.camerasdk.library.filter.util.ImageFilterTools;
 
 import net.smartbetter.wonderful.R;
 import net.smartbetter.wonderful.utils.BLBitmapUtils;
+import net.smartbetter.wonderful.utils.LogUtils;
 import net.smartbetter.wonderful.view.BLBeautifyImageView;
 
 
@@ -39,13 +40,13 @@ public class BLBeautifyFragment extends Fragment {
         mPath = getArguments().getString("path");
     }
 
-    public String getPath(){
+    public String getPath() {
         return mPath;
     }
 
-    public void setPath(String path){
+    public void setPath(String path) {
         mPath = path;
-        if (mBeautifyImage != null){
+        if (mBeautifyImage != null) {
             mBeautifyImage.setImage(path);
         }
     }
@@ -69,25 +70,26 @@ public class BLBeautifyFragment extends Fragment {
 
     /**
      * 添加滤镜
+     *
      * @param filterType
      */
-    public void addFilter(ImageFilterTools.FilterType filterType){
-        mBeautifyImage.addFilter(filterType);
+    public void addFilter(ImageFilterTools.FilterType filterType) {
+        mBeautifyImage.addFilter(filterType,mPath);
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return mBeautifyImage.getGPUBitmap();
     }
 
-    public void setBitmap(Bitmap bitmap){
+    public void setBitmap(Bitmap bitmap) {
         mBeautifyImage.setImage(bitmap);
     }
 
     //保存图片
-    public String complete(){
-        if(mBeautifyImage != null){
+    public String complete() {
+        if (mBeautifyImage != null) {
             return mBeautifyImage.save();
-        }else{
+        } else {
             return mPath;
         }
     }
