@@ -69,16 +69,18 @@ public class FilterUtils {
         if (filterType == null) {
             filter = new GPUImageFilter();
             imageView.setFilter(filter);
-        } else if (filterType == FilterType.SOBEL_EDGE_DETECTION) {
-            Bitmap carBitmap = imageView.getCurrentBitMap();
-            Mat rgba = new Mat();
-            Utils.bitmapToMat(carBitmap, rgba);
-            Mat edges = new Mat(rgba.size(), CvType.CV_8UC1);
-            Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY, 4);
-            Imgproc.Canny(edges, edges, 80, 100);
-            Utils.matToBitmap(edges, carBitmap);
-            imageView.setImage(carBitmap);
-        } else {
+        }
+//        else if (filterType == FilterType.SOBEL_EDGE_DETECTION) {
+//            Bitmap carBitmap = imageView.getCurrentBitMap();
+//            Mat rgba = new Mat();
+//            Utils.bitmapToMat(carBitmap, rgba);
+//            Mat edges = new Mat(rgba.size(), CvType.CV_8UC1);
+//            Imgproc.cvtColor(rgba, edges, Imgproc.COLOR_RGB2GRAY, 4);
+//            Imgproc.Canny(edges, edges, 80, 100);
+//            Utils.matToBitmap(edges, carBitmap);
+//            imageView.setImage(carBitmap);
+//        }
+        else {
             GT.startTime("线程内统计", filterType.name() + "算法");
             filter = ImageFilterTools.createFilterForType(context, filterType);
             GT.endTime("线程内统计", filterType.name() + "算法");
